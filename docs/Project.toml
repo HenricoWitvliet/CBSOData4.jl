@@ -1,0 +1,6 @@
+[deps]
+CBSOData4 = "8d9879b7-ce5c-422a-a169-91374863e329"
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+
+[compat]
+Documenter = "0.25"
