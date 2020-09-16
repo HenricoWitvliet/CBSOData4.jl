@@ -4,14 +4,31 @@ import HTTP
 import JSON
 import Tables
 
-export get_tables, get_meta, ODataTable_long
+export get_catalogs, get_tables, get_meta, ODataTable_long
 
 BASE_URL = "http://beta-odata4.cbs.nl"
 CATALOG = "CBS"
 
+
 function get_odata(url)
     result = HTTP.get(url)
     data = JSON.parse(String(result.body))
+end
+
+"""
+    get_catalogs(base)
+
+Get all the catalogs as a list of dicts. The `Identifier` can be used as the
+catalog for queries about datasets in a certain catalog.  If no parameters are
+given, the data is retrieved from the (CBS)[https://www.cbs.nl] OData4 portal.
+
+The optional parameter is:
+
+  - base::String, basename of the OData4 server
+"""
+function get_catalogs(base=BASE_URL)
+    url = base * "/" * "/Catalogs"
+    return get_odata(url)["value"]
 end
 
 """
@@ -151,9 +168,25 @@ Tables.getcolumn(r::OdataRow_long, s::Symbol) = something(getfield(r, :row)[Stri
 Tables.columnnames(r::OdataRow_long) = collect(keys(getfield(r, :row)))
 Base.NamedTuple(r::OdataRow_long) = NamedTuple{Tuple(Symbol.(keys(getfield(r, :row))))}(values(getfield(r, :row)))
 
+"""
+    ODataTable_long(table; columns, filters, base, catalog)
+
+Get a `Tables` object for the dataset defined by `table`.
+Optional parameters are:
+
+  - columns::Vector{String}, exact columnnames to select, empty for all columns
+  - filters::String, OData4 specification for row filter
+  - base::String, basename of the OData4 server
+  - catalog::String, path part of the OData4 server for catalog information
+
+# Examples
+```julia
+tbl = CBSOData4.ODataTable_long("82931NED", filter="Measure in ['T001036']")
+```
+"""
 function ODataTable_long(table; columns=[], filter="", base=BASE_URL, catalog=CATALOG)
     recordcount = get_count(table, base=base, catalog=catalog, columns=columns, filter=filter)
-    nextblock, nextlink = get_table(table, base=base, catalog=catalog, columns=columns)
+    nextblock, nextlink = get_table(table, base=base, catalog=catalog, columns=columns, filter=filter)
     meta = get_meta(table)
     names = Symbol.(collect(keys(nextblock[1])))
     types = [typeof(nextblock[1][String(name)]) for name in names]
