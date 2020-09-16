@@ -1,0 +1,1 @@
+{"@odata.context":"https://beta-odata4.cbs.nl/CBS/80072ned/$metadata#Observations","@odata.count":4409,"value":[{"Id":0,"Value":5.5,"Measure":"M001924","BedrijfskenmerkenSBI2008":"T001081","ValueAttribute":"None","Perioden":"1996KW01"}]}

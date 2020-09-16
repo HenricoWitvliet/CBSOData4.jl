@@ -1,0 +1,1 @@
+{"@odata.context":"https://beta-odata4.cbs.nl/CBS/$metadata","value":[{"name":"Catalogs","kind":"EntitySet","url":"Catalogs"},{"name":"Datasets","kind":"EntitySet","url":"Datasets"}]}
