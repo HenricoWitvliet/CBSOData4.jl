@@ -12,7 +12,7 @@ If you know the exact dataset, you can directly use it:
 ```julia
 using DataFrames, CBSOData4
 
-df = DataFrame(CBSOData4.ODataTable("80072ned"))
+df = DataFrame(CBSOData4.ODataTable_long("80072ned"))
 ```
 
 You can use the keyword argument `columns` to give a list of column names to select (case sensitive). And you can use `filter` to give a filter expression for the rows (as a String) using the [Odata4](https://www.odata.org/documentation/odata-version-4-0/) rules.
